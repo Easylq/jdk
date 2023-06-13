@@ -982,11 +982,13 @@ bool DefNewGeneration::no_allocs_since_save_marks() {
 }
 
 void DefNewGeneration::contribute_scratch(ScratchBlock*& list, Generation* requestor,
-                                         size_t max_alloc_words) {
-  if (requestor == this || _promotion_failed) {
+                                          size_t max_alloc_words) {
+  assert(requestor != this, "precondition");
+  assert(GenCollectedHeap::heap()->is_old_gen(requestor), "We should not call our own generation");
+
+  if (_promotion_failed) {
     return;
   }
-  assert(GenCollectedHeap::heap()->is_old_gen(requestor), "We should not call our own generation");
 
   /* $$$ Assert this?  "trace" is a "MarkSweep" function so that's not appropriate.
   if (to_space->top() > to_space->bottom()) {

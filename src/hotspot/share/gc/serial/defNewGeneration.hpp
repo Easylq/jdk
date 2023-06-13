@@ -248,9 +248,9 @@ class DefNewGeneration: public Generation {
   template <typename OopClosureType>
   void oop_since_save_marks_iterate(OopClosureType* cl);
 
-  // For non-youngest collection, the DefNewGeneration can contribute
-  // "to-space".
-  virtual void contribute_scratch(ScratchBlock*& list, Generation* requestor,
+  // For Old collection (part of running Full GC), the DefNewGeneration can
+  // contribute "to-space" as the scratch space.
+  void contribute_scratch(ScratchBlock*& list, Generation* requestor,
                           size_t max_alloc_words);
 
   // Reset for contribution of "to-space".

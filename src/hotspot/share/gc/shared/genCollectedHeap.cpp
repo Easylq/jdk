@@ -944,8 +944,9 @@ static void sort_scratch_list(ScratchBlock*& list) {
 ScratchBlock* GenCollectedHeap::gather_scratch(Generation* requestor,
                                                size_t max_alloc_words) {
   ScratchBlock* res = nullptr;
-  _young_gen->contribute_scratch(res, requestor, max_alloc_words);
-  _old_gen->contribute_scratch(res, requestor, max_alloc_words);
+  // Workaround to get the precise type
+  DefNewGeneration* cast_young_gen = (DefNewGeneration*)_young_gen;
+  cast_young_gen->contribute_scratch(res, requestor, max_alloc_words);
   sort_scratch_list(res);
   return res;
 }
